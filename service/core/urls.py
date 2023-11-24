@@ -24,5 +24,6 @@ from book_service.urls import urlpatterns as book_service_urls
 urlpatterns = [
     path('admin/', admin.site.urls),
     *book_service_urls,
+    path('api/', include('account.urls', 'user_api'))
 ]
 
