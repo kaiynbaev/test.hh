@@ -1,4 +1,6 @@
 from rest_framework import serializers
+
+from .tasks import send_feedback_email_task
 from .models import UserModel
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -23,4 +25,11 @@ class RegistrationSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({'password': 'Passwords must match.'})
         user.set_password(password)
         user.save()
+        send_feedback_email_task.delay(
+            email_address=[self.validated_data["email"]],
+            username=[self.validated_data["username"]],
+        )
         return user
+    
+        
+        
